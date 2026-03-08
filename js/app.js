@@ -131,11 +131,37 @@ class App {
         }
       });
     }
+
+    // Volume slider
+    const volSlider = document.getElementById('volume-slider');
+    if (volSlider) {
+      volSlider.addEventListener('input', (e) => {
+        const val = parseInt(e.target.value) / 100;
+        if (window.soundManager) {
+          window.soundManager.setVolume(val);
+          // Update mute button state
+          if (soundBtn) {
+            if (val === 0) {
+              soundBtn.textContent = '🔇';
+              soundBtn.classList.add('muted');
+            } else {
+              soundBtn.textContent = '🔊';
+              soundBtn.classList.remove('muted');
+            }
+          }
+        }
+      });
+    }
   }
 
   /** Switch screens */
   showScreen(screenName, data = {}) {
     this.currentScreen = screenName;
+
+    // Switch BGM based on screen
+    if (window.soundManager) {
+      window.soundManager.playBGM(screenName);
+    }
 
     // Hide all screens
     document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));

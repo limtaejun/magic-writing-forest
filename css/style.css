@@ -133,6 +133,56 @@ h1, h2, h3, h4 {
   opacity: 0.5;
 }
 
+/* ── Volume Control ── */
+.volume-control {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.volume-slider {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 80px;
+  height: 6px;
+  border-radius: 3px;
+  background: linear-gradient(90deg, var(--color-pink), var(--color-lavender));
+  outline: none;
+  opacity: 0.8;
+  transition: opacity 0.2s, width 0.3s;
+}
+
+.volume-slider:hover {
+  opacity: 1;
+}
+
+.volume-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--color-white);
+  border: 2px solid var(--color-lavender);
+  cursor: pointer;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.15);
+  transition: transform 0.2s;
+}
+
+.volume-slider::-webkit-slider-thumb:hover {
+  transform: scale(1.2);
+}
+
+.volume-slider::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--color-white);
+  border: 2px solid var(--color-lavender);
+  cursor: pointer;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.15);
+}
+
 /* ── Profile Card ── */
 .profile-card {
   background: linear-gradient(135deg, var(--color-pink) 0%, var(--color-lavender) 100%);
