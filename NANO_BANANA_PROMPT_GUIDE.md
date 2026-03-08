@@ -383,17 +383,17 @@ transparent background, centered composition. No text.
 ```
 assets/images/
 ├── characters/
-│   ├── yuna/                    ← 유나 캐릭터 (10장)
-│   │   ├── yuna-default.png         ✅ 기본 서기
-│   │   ├── yuna-writing.png         ✅ 글쓰기
-│   │   ├── yuna-happy.png           ✅ 기뻐하기
-│   │   ├── yuna-thinking.png        ✅ 생각하기
-│   │   ├── yuna-surprised.png       ✅ 놀라기
-│   │   ├── yuna-reading.png         ✅ 책 읽기
-│   │   ├── yuna-victory.png         ✅ 승리
-│   │   ├── yuna-with-cat.png        ✅ 고양이와 함께
-│   │   ├── yuna-with-friends.png    ✅ 친구들과
-│   │   └── yuna-wizard.png          ✅ 마법사 모드
+│   ├── yuna/                    ← 유나 캐릭터 (10장) ✅ 전부 완료
+│   │   ├── yuna-default.png         ✅ 생성완료
+│   │   ├── yuna-writing.png         ✅ 생성완료
+│   │   ├── yuna-happy.png           ✅ 생성완료
+│   │   ├── yuna-thinking.png        ✅ 생성완료
+│   │   ├── yuna-surprised.png       ✅ 생성완료
+│   │   ├── yuna-reading.png         ✅ 생성완료
+│   │   ├── yuna-victory.png         ✅ 생성완료
+│   │   ├── yuna-with-cat.png        ✅ 생성완료
+│   │   ├── yuna-with-friends.png    ✅ 생성완료
+│   │   └── yuna-wizard.png          ✅ 생성완료
 │   │
 │   ├── friends/                 ← 친구 캐릭터 (6명 x 3장 = 18장)
 │   │   ├── jihyun-default.png
@@ -445,10 +445,10 @@ assets/images/
 │   │   ├── pangyo-summer-day.png
 │   │   ├── pangyo-autumn-sunset.png
 │   │   └── pangyo-winter-night.png
-│   ├── jeju/
-│   │   ├── jeju-beach-day.jpg
-│   │   ├── jeju-tangerine-sunset.jpg
-│   │   └── jeju-hallasan-morning.jpg
+│   ├── jeju/                    ✅ 전부 완료
+│   │   ├── jeju-beach-day.jpg       ✅ 생성완료
+│   │   ├── jeju-tangerine-sunset.jpg ✅ 생성완료
+│   │   └── jeju-hallasan-morning.jpg ✅ 생성완료
 │   ├── aca/
 │   │   ├── aca-classroom.png
 │   │   ├── aca-library.png

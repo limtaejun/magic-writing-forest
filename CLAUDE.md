@@ -188,24 +188,26 @@
 
 ---
 
-## 🔊 9. Sound Design (사운드 디자인)
+## 🔊 9. Sound Design (사운드 디자인) ✅ 구현 완료
 
 ### 9-1. 사운드 에셋
-* **배경 음악 (BGM):**
-    * 메인 지도: 밝고 신비로운 오르골 + 피아노 루프 (8-bit 판타지 풍)
-    * 퀘스트 화면: 잔잔한 피아노 + 하프 (집중력 유지)
-    * 보상 화면: 업템포 팡파르 + 오케스트라 환호
-    * 포니빌 테마: MLP 스타일 밝은 팝 멜로디
-* **효과음 (SFX):**
-    * 퀘스트 시작: 두루마리 펼치는 소리 + 마법 종소리
-    * 타이핑: 부드러운 키보드 '톡톡' (선택적 on/off)
-    * 정답 제출: '반짝' 마법 사운드 + 관중 환호
-    * 스탬프 획득: '퐁!' 도장 찍는 소리
-    * 레벨업: 레벨업 팡파르 (3초)
-    * 버튼 클릭: 부드러운 '뽀잉' 소리
-    * 에러/재시도: 부드러운 '앗?' 소리 (좌절감 없이 귀여운 톤)
-* **소스:** Freesound.org (CC0), Pixabay Audio, 또는 AI 음악 생성 (Suno, Udio)
-* **구현:** Howler.js 라이브러리 (웹 오디오 관리) + 볼륨/뮤트 토글 버튼
+* **배경 음악 (BGM) — Google MusicFX로 생성, MP3:**
+    * `bgm-map.mp3`: 메인 지도 — 마법 오르골 + 피아노
+    * `bgm-quest.mp3`: 퀘스트 화면 — 잔잔한 피아노 + 하프 (집중용)
+    * `bgm-reward.mp3`: 보상 화면 — 밝은 축하 멜로디
+    * `bgm-ponyville.mp3`: 포니빌/제주 — 밝은 팝 멜로디
+    * 화면 전환 시 자동 크로스페이드
+* **효과음 (SFX) — Web Audio API 합성 (파일 불필요):**
+    * 퀘스트 시작: 마법 스케일 상승음
+    * 정답 제출: 확인 2음
+    * Perfect 정답: C-E-G-C 아르페지오 팡파르 + 스파클
+    * Creative 답변: 몽환적 상승 멜로디
+    * 스탬프 획득: 퐁! 팝 + 딩
+    * 레벨업: 그랜드 팡파르 + 코드 + 별가루
+    * 버튼 클릭/네비게이션/뒤로가기/힌트: 각각 고유 효과음
+    * 에러: 부드러운 하강음
+* **구현:** `js/sound-manager.js` — Web Audio API (SFX 합성) + HTML Audio (BGM 재생)
+* **UI:** 🔊 뮤트 버튼 + 볼륨 슬라이더 (상단 바)
 
 ---
 
@@ -214,94 +216,87 @@
 ### 10-1. 기술 스택
 ```
 Frontend:  HTML5 + CSS3 + Vanilla JavaScript (프레임워크 없이 단순하게)
-Styling:   CSS Custom Properties + Animate.css + 자체 애니메이션
-Animation: Lottie-web + canvas-confetti + tsParticles + GSAP
-Audio:     Howler.js
-Data:      Markdown → JSON 변환 (빌드 타임) → LocalStorage (진행 상황 저장)
-Print:     CSS @media print + html2canvas (캡처 후 출력)
-Hosting:   로컬 파일 (file://) 또는 간단한 로컬 서버 (Live Server)
+Styling:   CSS Custom Properties + 자체 애니메이션
+Animation: 순수 JS 컨페티 시스템 + CSS 애니메이션 (타자기, 스파클, 바운스)
+Audio:     Web Audio API (SFX 합성) + HTML Audio (BGM)
+Auth:      Firebase Auth (Google 로그인) + 비밀번호 게이트 (2단계 인증)
+Data:      Markdown → JS 임베딩 (빌드 타임) → Firestore (클라우드) + LocalStorage (캐시)
+Print:     CSS @media print
+Hosting:   GitHub Pages (https://limtaejun.github.io/magic-writing-forest/)
+Repo:      GitHub Public (https://github.com/limtaejun/magic-writing-forest)
 ```
 
-### 10-2. 폴더 구조
+### 10-2. 폴더 구조 (현재 실제 구조)
 ```
 Wirting2026/
 ├── CLAUDE.md                      # 프로젝트 기획서
-├── index.html                     # 메인 엔트리
+├── NANO_BANANA_PROMPT_GUIDE.md    # 이미지 생성 프롬프트 가이드
+├── .gitignore                     # Git 제외 파일 설정
+├── index.html                     # 메인 엔트리 (2단계 인증 게이트 포함)
+├── build-quests.js                # MD→JSON 빌드 스크립트 (Node.js용, 참고용)
 ├── templates/
 │   ├── templates.md               # 핵심 구문 DB (235개)
 │   └── templates_5sentences.md    # 5문장 퀘스트 북 (235개)
 ├── assets/
 │   ├── images/
-│   │   ├── characters/            # 캐릭터 일러스트 (PNG/WebP)
-│   │   │   ├── yuna/              # 유나 포즈별 (10종+)
-│   │   │   ├── friends/           # The Magic 5 + Riha (각 3-5종)
-│   │   │   ├── ponies/            # MLP 영감 캐릭터 (6종+)
-│   │   │   ├── teeniepings/       # 티니핑 영감 캐릭터
-│   │   │   ├── gabby/             # 개비캣 영감 캐릭터
-│   │   │   └── cats/              # 길고양이/유니콘 (5종+)
-│   │   ├── backgrounds/           # 배경 일러스트
-│   │   │   ├── pangyo/            # 판교 배경 (계절/시간대별)
-│   │   │   ├── jeju/              # 제주 배경
-│   │   │   ├── aca/               # ACA 학원 배경
-│   │   │   └── ponyville/         # 포니빌/이퀘스트리아 배경
-│   │   ├── ui/                    # UI 요소 (버튼, 프레임, 아이콘)
-│   │   ├── stamps/                # 스탬프/스티커 (17종)
-│   │   └── badges/                # 뱃지 (5종)
-│   ├── animations/                # Lottie JSON 파일
-│   │   ├── confetti.json
-│   │   ├── sparkle.json
-│   │   ├── character-celebrate.json
-│   │   └── stamp-bounce.json
-│   ├── sounds/                    # 사운드 파일 (MP3/OGG)
-│   │   ├── bgm/                   # 배경 음악
-│   │   └── sfx/                   # 효과음
-│   └── fonts/                     # 웹폰트 (오프라인용)
+│   │   ├── characters/
+│   │   │   └── yuna/              # ✅ 유나 포즈별 (10종 완료)
+│   │   ├── backgrounds/
+│   │   │   └── jeju/              # ✅ 제주 배경 (3종 완료, JPG 1920x1080 최적화)
+│   │   └── (stamps/, badges/, friends/, ponies/ 등 → 추후 생성)
+│   └── sounds/
+│       └── bgm/                   # ✅ BGM 4종 완료
+│           ├── bgm-map.mp3
+│           ├── bgm-quest.mp3
+│           ├── bgm-reward.mp3
+│           └── bgm-ponyville.mp3
 ├── css/
-│   ├── style.css                  # 메인 스타일
-│   ├── animations.css             # 커스텀 애니메이션
-│   ├── quest.css                  # 퀘스트 화면 스타일
-│   ├── map.css                    # 지도 화면 스타일
+│   ├── style.css                  # 메인 스타일 + 볼륨 컨트롤
+│   ├── animations.css             # 캐릭터/스파클/레벨업 애니메이션
+│   ├── quest.css                  # 퀘스트 화면 + 학부모 승인 버튼
+│   ├── map.css                    # 지도 화면
 │   └── print.css                  # 프린트용 스타일
 ├── js/
-│   ├── app.js                     # 메인 앱 로직
-│   ├── quest-engine.js            # 퀘스트 로딩/채점 엔진
-│   ├── md-parser.js               # 마크다운 파서
-│   ├── animation-controller.js    # 애니메이션 관리
-│   ├── sound-manager.js           # 사운드 재생 관리
-│   ├── progress-tracker.js        # 진행 상황 (LocalStorage)
-│   ├── reward-system.js           # 스탬프/뱃지/레벨업 로직
-│   └── print-handler.js           # 프린트 기능
+│   ├── app.js                     # 메인 앱 (화면 전환, 이벤트, 보상, 프린트)
+│   ├── quest-engine.js            # 퀘스트 렌더링/채점 (3단계 + 학부모 승인)
+│   ├── md-parser.js               # 마크다운 파서 (브라우저 런타임)
+│   ├── animation-controller.js    # 컨페티/타자기/캐릭터/스파클/레벨업
+│   ├── sound-manager.js           # Web Audio SFX + BGM 재생/크로스페이드
+│   └── progress-tracker.js        # Firestore 클라우드 + LocalStorage 캐시
 ├── data/
-│   └── quests.json                # MD에서 변환된 퀘스트 데이터
-└── libs/                          # 외부 라이브러리 (오프라인용)
-    ├── lottie-web.min.js
-    ├── canvas-confetti.min.js
-    ├── tsparticles.min.js
-    ├── howler.min.js
-    └── animate.min.css
+│   └── quests-data.js             # MD 임베딩 (브라우저에서 직접 파싱)
+└── tools/
+    └── remove-checkerboard.html   # 이미지 체커보드 배경 제거 도구
 ```
 
-### 10-3. 데이터 흐름
+### 10-3. 인증 & 데이터 흐름
 ```
-[templates.md] ──┐
-                  ├──→ [md-parser.js] ──→ [quests.json] ──→ [quest-engine.js]
-[templates_5s.md]┘                                              │
-                                                                ▼
-                                          ┌──────────────────────────────────┐
-                                          │   Quest Screen UI                │
-                                          │   • 문장 1-4 렌더링 (타자기 효과) │
-                                          │   • 5번째 문장 빈칸 입력 필드     │
-                                          │   • 캐릭터 일러스트 표시          │
-                                          └──────────┬───────────────────────┘
-                                                     │ 유나가 답 입력 후 제출
-                                                     ▼
-                                          ┌──────────────────────────────────┐
-                                          │   Reward System                  │
-                                          │   • 정답 비교 (유연한 매칭)       │
-                                          │   • 축하 애니메이션 트리거        │
-                                          │   • 스탬프 지급 + LocalStorage    │
-                                          │   • 레벨업 체크                   │
-                                          └──────────────────────────────────┘
+[사이트 접속]
+    │
+    ▼
+[1단계: 비밀번호 입력] ──→ "yuna2026" 확인
+    │
+    ▼
+[2단계: Google 로그인] ──→ Firebase Auth
+    │
+    ▼
+[앱 스크립트 동적 로드] ──→ quests-data.js → md-parser → progress-tracker → app.js
+    │
+    ▼
+[Firestore에서 진행 데이터 로드] ──→ LocalStorage 캐시 동기화
+    │
+    ▼
+[메인 지도 표시]
+
+[퀘스트 데이터 흐름]
+templates.md ──┐
+               ├──→ quests-data.js (MD 임베딩) ──→ md-parser.js (런타임 파싱)
+templates_5s.md┘                                        │
+                                                        ▼
+                                          quest-engine.js (렌더링 + 채점)
+                                                        │
+                                                        ▼
+                                          progress-tracker.js (Firestore + LocalStorage)
 ```
 
 ### 10-4. 정답 판정 로직
@@ -330,26 +325,41 @@ Wirting2026/
 
 ## 🗓️ 12. Development Phases (개발 단계)
 
-### Phase 1: Foundation (기반 구축)
-- [ ] 폴더 구조 생성 및 라이브러리 세팅
-- [ ] MD → JSON 파서 구현
-- [ ] 기본 HTML/CSS 레이아웃 (메인 지도 + 퀘스트 화면)
-- [ ] 퀘스트 엔진 핵심 로직 (문장 표시 + 입력 + 채점)
-- [ ] LocalStorage 진행 상황 저장
+### Phase 1: Foundation (기반 구축) ✅ 완료
+- [x] 폴더 구조 생성
+- [x] MD → JS 임베딩 파서 구현 (`md-parser.js` + `quests-data.js`)
+- [x] 기본 HTML/CSS 레이아웃 (메인 지도 + 퀘스트 + 컬렉션북 + 위치별 퀘스트)
+- [x] 퀘스트 엔진 핵심 로직 (문장 표시 + 입력 + 3단계 채점 + 학부모 승인)
+- [x] LocalStorage 진행 상황 저장
+- [x] 4개 장소 모두 클릭 가능 (ACA/판교/제주/포니빌)
+- [x] Riha → 제주 친구로 분리 (Magic 5 + Riha)
 
-### Phase 2: Visual Magic (비주얼 마법)
-- [ ] 나노바나나로 캐릭터/배경 에셋 생성
-- [ ] Lottie 축하 애니메이션 세팅
-- [ ] canvas-confetti 보상 이펙트
-- [ ] 타자기 효과 + 문장 등장 애니메이션
-- [ ] 스탬프/뱃지 시스템 UI
+### Phase 2: Visual Magic (비주얼 마법) ✅ 완료
+- [x] 나노바나나로 유나 캐릭터 10종 생성
+- [x] 나노바나나로 제주 배경 3종 생성
+- [x] 순수 JS 컨페티 보상 이펙트 (Perfect: 멀티버스트, Creative: 라이트 스파클)
+- [x] 타자기 효과 + 문장 등장 애니메이션
+- [x] 캐릭터 이미지 시스템 (이미지 존재 확인 + 이모지 폴백)
+- [x] 스파클 파티클 효과
+- [x] 레벨업 오버레이 효과
+- [ ] 나머지 캐릭터 에셋 생성 (친구/포니/요정/고양이)
+- [ ] 나머지 배경 에셋 생성 (판교/ACA/포니빌)
+- [ ] 스탬프/뱃지 이미지 에셋 생성
 
-### Phase 3: Polish & Delight (완성도)
-- [ ] 사운드 시스템 통합 (BGM + SFX)
-- [ ] 프린트 기능 (예쁜 레이아웃)
-- [ ] 레벨업 시스템 + 컬렉션북
-- [ ] 지도 탐험 애니메이션
+### Phase 3: Polish & Delight (완성도) ✅ 대부분 완료
+- [x] 사운드 시스템 통합 — Web Audio SFX + BGM 4종 (MusicFX 생성)
+- [x] 볼륨 슬라이더 + 뮤트 토글 UI
+- [x] 프린트 기능 (CSS @media print)
+- [x] 레벨업 시스템 (5단계) + 컬렉션북 (판교)
+- [x] 제주 배경 테마 (위치별 배경 이미지 전환)
 - [ ] idle 애니메이션 + 마이크로 인터랙션
+
+### Phase 3.5: Deployment & Auth (배포 & 인증) ✅ 완료
+- [x] GitHub Pages 배포 (Public repo)
+- [x] 2단계 인증 게이트 (비밀번호 + Google 로그인)
+- [x] Firebase Auth (Google 로그인)
+- [x] Firestore 클라우드 진행 데이터 저장
+- [x] 로그아웃 기능
 
 ### Phase 4: Content & Test (콘텐츠 & 테스트)
 - [ ] 235개 퀘스트 전체 테스트
