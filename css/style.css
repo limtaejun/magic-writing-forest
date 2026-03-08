@@ -94,9 +94,9 @@ h1, h2, h3, h4 {
   padding: 16px 0;
   position: sticky;
   top: 0;
-  background: var(--color-bg);
+  background: transparent;
   z-index: 100;
-  border-bottom: 2px solid rgba(200, 162, 255, 0.2);
+  border-bottom: none;
 }
 
 .app-title {
@@ -582,13 +582,6 @@ body.bg-jeju-quest {
 body.bg-jeju-reward {
   background-image: linear-gradient(rgba(255,248,240,0.4), rgba(255,248,240,0.4)),
     url('../assets/images/backgrounds/jeju/jeju-tangerine-sunset.jpg');
-}
-
-body.bg-jeju-list .top-bar,
-body.bg-jeju-quest .top-bar,
-body.bg-jeju-reward .top-bar {
-  background: rgba(255,248,240,0.85);
-  backdrop-filter: blur(8px);
 }
 
 /* ── Location Quests (Jeju / Ponyville) ── */
