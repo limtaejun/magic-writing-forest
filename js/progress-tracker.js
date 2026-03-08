@@ -1,12 +1,13 @@
 /**
  * progress-tracker.js
- * Manages quest progress, stamps, badges, and levels via LocalStorage.
+ * Manages quest progress via LocalStorage + Firestore cloud sync.
  */
 
 class ProgressTracker {
   constructor(storageKey = 'yuna_magic_forest_progress') {
     this.storageKey = storageKey;
     this.state = null;
+    this._saveTimeout = null;
   }
 
   /** Default empty state */
@@ -36,8 +37,29 @@ class ProgressTracker {
     ];
   }
 
-  /** Load state from LocalStorage */
-  load() {
+  /** Load state: Firestore first, then LocalStorage fallback */
+  async load() {
+    // Try Firestore if user is logged in
+    if (window._db && window._currentUser) {
+      try {
+        const doc = await window._db
+          .collection('users')
+          .doc(window._currentUser.uid)
+          .get();
+
+        if (doc.exists) {
+          this.state = doc.data();
+          // Also cache to LocalStorage
+          this._saveLocal();
+          console.log('Progress loaded from Firestore');
+          return this.state;
+        }
+      } catch (e) {
+        console.warn('Firestore load failed, falling back to LocalStorage:', e);
+      }
+    }
+
+    // Fallback: LocalStorage
     try {
       const raw = localStorage.getItem(this.storageKey);
       if (raw) {
@@ -49,15 +71,49 @@ class ProgressTracker {
       console.warn('Failed to load progress, starting fresh:', e);
       this.state = ProgressTracker.defaultState();
     }
+
+    // If loaded from LocalStorage and user is logged in, push to Firestore
+    if (window._db && window._currentUser && this.state.totalStamps > 0) {
+      this._saveFirestore();
+    }
+
     return this.state;
   }
 
-  /** Save state to LocalStorage */
+  /** Save state to LocalStorage + Firestore */
   save() {
+    this._saveLocal();
+    this._debouncedFirestoreSave();
+  }
+
+  /** Save to LocalStorage */
+  _saveLocal() {
     try {
       localStorage.setItem(this.storageKey, JSON.stringify(this.state));
     } catch (e) {
-      console.error('Failed to save progress:', e);
+      console.error('Failed to save to LocalStorage:', e);
+    }
+  }
+
+  /** Debounced Firestore save (avoids too many writes) */
+  _debouncedFirestoreSave() {
+    if (this._saveTimeout) clearTimeout(this._saveTimeout);
+    this._saveTimeout = setTimeout(() => this._saveFirestore(), 1000);
+  }
+
+  /** Save to Firestore */
+  _saveFirestore() {
+    if (!window._db || !window._currentUser) return;
+
+    try {
+      window._db
+        .collection('users')
+        .doc(window._currentUser.uid)
+        .set(this.state, { merge: true })
+        .then(() => console.log('Progress saved to Firestore'))
+        .catch(e => console.warn('Firestore save failed:', e));
+    } catch (e) {
+      console.warn('Firestore save error:', e);
     }
   }
 

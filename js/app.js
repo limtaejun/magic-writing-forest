@@ -14,8 +14,8 @@ class App {
 
   /** Initialize the app */
   async init() {
-    // Load progress
-    this.progress.load();
+    // Load progress (async - tries Firestore first)
+    await this.progress.load();
 
     // Load quest data
     await this.loadQuestData();
@@ -149,6 +149,19 @@ class App {
               soundBtn.classList.remove('muted');
             }
           }
+        }
+      });
+    }
+
+    // Logout button
+    const logoutBtn = document.getElementById('logout-btn');
+    if (logoutBtn) {
+      logoutBtn.addEventListener('click', () => {
+        if (window._auth) {
+          if (window.soundManager) window.soundManager.stopBGM();
+          window._auth.signOut();
+          window._appLoaded = false;
+          location.reload();
         }
       });
     }
