@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Yuna's Magic Writing Forest</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Jua&family=Gaegu:wght@400;700&family=Nunito:wght@400;600;700;800&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/map.css">
+  <link rel="stylesheet" href="css/quest.css">
+  <link rel="stylesheet" href="css/animations.css">
+  <link rel="stylesheet" href="css/print.css">
+
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🦄</text></svg>">
+</head>
+<body>
+
+  <!-- ── Password Gate ── -->
+  <div id="password-gate" style="
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    background: linear-gradient(135deg, #FFF8F0 0%, #FFE8F5 50%, #E8E0FF 100%);
+    font-family: 'Nunito', 'Noto Sans KR', sans-serif;
+  ">
+    <div style="
+      text-align: center;
+      background: white;
+      border-radius: 24px;
+      padding: 48px 40px;
+      box-shadow: 0 8px 32px rgba(200, 162, 255, 0.2);
+      max-width: 380px;
+      width: 90%;
+    ">
+      <div style="font-size: 3.5rem; margin-bottom: 12px;">🦄</div>
+      <h1 style="font-family: 'Jua', sans-serif; color: #C8A2FF; font-size: 1.5rem; margin-bottom: 4px;">
+        Yuna's Magic Writing Forest
+      </h1>
+      <p style="color: #7A6B5D; font-size: 0.9rem; margin-bottom: 24px;">
+        Enter the magic password to enter!
+      </p>
+      <input id="gate-password" type="password" placeholder="Magic Password ✨" autocomplete="off" style="
+        width: 100%;
+        padding: 14px 20px;
+        border: 2px solid #E8E0FF;
+        border-radius: 16px;
+        font-size: 1.1rem;
+        font-family: 'Nunito', sans-serif;
+        text-align: center;
+        outline: none;
+        transition: border-color 0.3s;
+      " onfocus="this.style.borderColor='#C8A2FF'" onblur="this.style.borderColor='#E8E0FF'">
+      <button id="gate-submit" style="
+        width: 100%;
+        margin-top: 16px;
+        padding: 14px;
+        background: linear-gradient(135deg, #FFB6D9, #C8A2FF);
+        color: white;
+        border: none;
+        border-radius: 16px;
+        font-family: 'Jua', sans-serif;
+        font-size: 1.15rem;
+        cursor: pointer;
+        transition: transform 0.2s, box-shadow 0.2s;
+      " onmouseover="this.style.transform='scale(1.03)';this.style.boxShadow='0 6px 20px rgba(200,162,255,0.3)'"
+         onmouseout="this.style.transform='scale(1)';this.style.boxShadow='none'">
+        Enter the Forest!
+      </button>
+      <p id="gate-error" style="
+        color: #FF6B8A;
+        font-size: 0.85rem;
+        margin-top: 12px;
+        display: none;
+      ">Hmm, that's not the right spell. Try again! 🪄</p>
+    </div>
+  </div>
+
+  <div id="app" style="display: none;">
+
+    <!-- ── Top Bar ── -->
+    <header class="top-bar">
+      <div class="app-title">
+        <span>🦄</span>
+        <span>Yuna's Magic Writing Forest</span>
+      </div>
+      <div class="top-bar-actions">
+        <button id="sound-toggle" title="Toggle Sound">🔊</button>
+      </div>
+    </header>
+
+    <!-- ══════════════════════════════════════════
+         SCREEN 1: Map
+         ══════════════════════════════════════════ -->
+    <section id="screen-map" class="screen active">
+
+      <!-- Profile Card -->
+      <div class="profile-card">
+        <div class="profile-avatar" id="profile-avatar">🧙‍♀️</div>
+        <div class="profile-info">
+          <h3 id="profile-name">Yuna</h3>
+          <p id="profile-level">Lv.1 Matisse Beginner</p>
+          <p id="profile-stamps">⭐ 0  🌟 0</p>
+          <p id="profile-progress">0/235 quests</p>
+        </div>
+      </div>
+
+      <!-- World Map -->
+      <div class="map-container">
+        <div class="map-clouds"></div>
+
+        <div class="map-locations">
+          <!-- Pangyo -->
+          <div class="map-location" data-target="pangyo">
+            <div class="map-location-icon">🏡</div>
+            <div class="map-location-name">Pangyo Magic Town</div>
+          </div>
+
+          <!-- ACA Academy (Main action) -->
+          <div class="map-location" data-target="aca">
+            <div class="map-location-icon">🏫</div>
+            <div class="map-location-name">ACA Magic Academy</div>
+          </div>
+
+          <!-- Jeju -->
+          <div class="map-location" data-target="jeju">
+            <div class="map-location-icon">🏝️</div>
+            <div class="map-location-name">Jeju Memory Island</div>
+          </div>
+
+          <!-- Ponyville Portal -->
+          <div class="map-location" data-target="ponyville">
+            <div class="map-location-icon">🌈</div>
+            <div class="map-location-name">Ponyville Portal</div>
+          </div>
+        </div>
+      </div>
+
+      <p class="map-instruction">
+        Click any location to explore! <strong>ACA Academy</strong> = Writing Quests &middot;
+        <strong>Pangyo</strong> = Collection Book &middot;
+        <strong>Jeju</strong> &amp; <strong>Ponyville</strong> = Themed Adventures
+      </p>
+
+    </section>
+
+    <!-- ══════════════════════════════════════════
+         SCREEN 2: Section Selection
+         ══════════════════════════════════════════ -->
+    <section id="screen-sections" class="screen">
+      <div class="sections-header">
+        <button class="btn btn-back-map">← Back to Map</button>
+        <h2>Lincoln Class Quest Board</h2>
+      </div>
+      <div id="sections-grid"></div>
+    </section>
+
+    <!-- ══════════════════════════════════════════
+         SCREEN 3: Quest List (per section)
+         ══════════════════════════════════════════ -->
+    <section id="screen-quest-list" class="screen">
+      <div class="sections-header">
+        <button class="btn btn-back-sections">← Back to Sections</button>
+        <h2 id="quest-list-title">Quests</h2>
+      </div>
+      <div id="quest-list-grid"></div>
+    </section>
+
+    <!-- ══════════════════════════════════════════
+         SCREEN: Collection Book (Pangyo)
+         ══════════════════════════════════════════ -->
+    <section id="screen-collection" class="screen">
+      <div class="sections-header">
+        <button class="btn btn-back-map">← Back to Map</button>
+        <h2>🏡 My Collection Book</h2>
+      </div>
+      <div id="collection-content"></div>
+    </section>
+
+    <!-- ══════════════════════════════════════════
+         SCREEN: Location-themed Quests (Jeju / Ponyville)
+         ══════════════════════════════════════════ -->
+    <section id="screen-location-quests" class="screen">
+      <div class="sections-header">
+        <button class="btn btn-back-map">← Back to Map</button>
+        <h2 id="location-quests-title">Location Quests</h2>
+      </div>
+      <p id="location-quests-subtitle" class="location-subtitle"></p>
+      <div id="location-quests-grid"></div>
+    </section>
+
+    <!-- ══════════════════════════════════════════
+         SCREEN 4: Active Quest
+         ══════════════════════════════════════════ -->
+    <section id="screen-quest" class="screen">
+      <button class="btn btn-back-quests">← Back to Quest List</button>
+      <div id="quest-container"></div>
+    </section>
+
+    <!-- ══════════════════════════════════════════
+         SCREEN 5: Reward
+         ══════════════════════════════════════════ -->
+    <section id="screen-reward" class="screen">
+      <div id="reward-content"></div>
+    </section>
+
+  </div><!-- #app -->
+
+  <!-- Print Area (hidden on screen, visible on print) -->
+  <div id="print-area"></div>
+
+  <!-- Password Gate Logic -->
+  <script>
+  (function() {
+    // ── Change this password ──
+    const MAGIC_PASSWORD = 'yuna2026';
+
+    const gate = document.getElementById('password-gate');
+    const app = document.getElementById('app');
+    const input = document.getElementById('gate-password');
+    const btn = document.getElementById('gate-submit');
+    const error = document.getElementById('gate-error');
+
+    // Check if already authenticated this session
+    if (sessionStorage.getItem('yuna_forest_auth') === '1') {
+      gate.style.display = 'none';
+      app.style.display = '';
+      loadApp();
+    }
+
+    btn.addEventListener('click', tryEnter);
+    input.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter') tryEnter();
+    });
+
+    function tryEnter() {
+      if (input.value === MAGIC_PASSWORD) {
+        sessionStorage.setItem('yuna_forest_auth', '1');
+        gate.style.opacity = '1';
+        gate.style.transition = 'opacity 0.4s ease';
+        gate.style.opacity = '0';
+        setTimeout(function() {
+          gate.style.display = 'none';
+          app.style.display = '';
+          app.style.opacity = '0';
+          app.style.transition = 'opacity 0.4s ease';
+          requestAnimationFrame(function() { app.style.opacity = '1'; });
+          loadApp();
+        }, 400);
+      } else {
+        error.style.display = 'block';
+        input.style.borderColor = '#FF6B8A';
+        input.value = '';
+        input.focus();
+        setTimeout(function() {
+          input.style.borderColor = '#E8E0FF';
+        }, 1500);
+      }
+    }
+
+    // Dynamically load app scripts only after authentication
+    function loadApp() {
+      if (window._appLoaded) return;
+      window._appLoaded = true;
+      var scripts = [
+        'data/quests-data.js',
+        'js/md-parser.js',
+        'js/progress-tracker.js',
+        'js/animation-controller.js',
+        'js/quest-engine.js',
+        'js/app.js'
+      ];
+      function loadNext(i) {
+        if (i >= scripts.length) return;
+        var s = document.createElement('script');
+        s.src = scripts[i];
+        s.onload = function() { loadNext(i + 1); };
+        document.body.appendChild(s);
+      }
+      loadNext(0);
+    }
+  })();
+  </script>
+
+</body>
+</html>

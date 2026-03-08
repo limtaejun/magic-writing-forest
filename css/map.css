@@ -1,0 +1,192 @@
+/* ========================================
+   Map Screen Styles
+   ======================================== */
+
+.map-container {
+  position: relative;
+  width: 100%;
+  min-height: 400px;
+  background: linear-gradient(180deg, #E8F4FD 0%, #C5E8D8 40%, #D4E8C2 100%);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-medium);
+  margin: 16px 0;
+}
+
+/* Animated clouds */
+.map-clouds {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 200%;
+  height: 120px;
+  background:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 60'%3E%3Cellipse cx='50' cy='35' rx='40' ry='18' fill='white' opacity='0.6'/%3E%3Cellipse cx='65' cy='28' rx='25' ry='14' fill='white' opacity='0.7'/%3E%3Cellipse cx='35' cy='30' rx='20' ry='12' fill='white' opacity='0.5'/%3E%3C/svg%3E") repeat-x;
+  animation: cloudDrift 30s linear infinite;
+  pointer-events: none;
+}
+
+@keyframes cloudDrift {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+/* Map locations */
+.map-locations {
+  display: flex;
+  justify-content: space-around;
+  align-items: flex-end;
+  padding: 80px 20px 40px;
+  min-height: 400px;
+  position: relative;
+}
+
+.map-location {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+  transition: var(--transition);
+  position: relative;
+}
+
+.map-location:hover {
+  transform: translateY(-8px) scale(1.08);
+}
+
+.map-location-icon {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.5rem;
+  box-shadow: var(--shadow-card);
+  border: 4px solid var(--color-white);
+  position: relative;
+}
+
+/* Glowing marker effect */
+.map-location-icon::after {
+  content: '';
+  position: absolute;
+  inset: -6px;
+  border-radius: 50%;
+  border: 2px solid var(--color-gold);
+  opacity: 0;
+  animation: glow-pulse 2s ease-in-out infinite;
+}
+
+.map-location:hover .map-location-icon::after {
+  opacity: 1;
+}
+
+@keyframes glow-pulse {
+  0%, 100% { opacity: 0; transform: scale(1); }
+  50% { opacity: 0.7; transform: scale(1.05); }
+}
+
+.map-location-name {
+  margin-top: 12px;
+  font-family: var(--font-heading);
+  font-size: 1rem;
+  color: var(--color-text);
+  background: var(--color-white);
+  padding: 6px 16px;
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-soft);
+  opacity: 1;
+  transition: var(--transition);
+}
+
+.map-location:hover .map-location-name {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-medium);
+}
+
+/* Location-specific colors */
+.map-location[data-target="pangyo"] .map-location-icon {
+  background: linear-gradient(135deg, var(--color-mint), #7DCFB6);
+}
+
+.map-location[data-target="aca"] .map-location-icon {
+  background: linear-gradient(135deg, var(--color-lavender), #A87DDB);
+}
+
+.map-location[data-target="jeju"] .map-location-icon {
+  background: linear-gradient(135deg, var(--color-sky), #5BB8E8);
+}
+
+.map-location[data-target="ponyville"] .map-location-icon {
+  background: linear-gradient(135deg, var(--color-pink), #FF8EC4);
+}
+
+/* All locations are interactive */
+.map-location .map-location-icon {
+  animation: bounce-gentle 3s ease-in-out infinite;
+}
+
+.map-location[data-target="pangyo"] .map-location-icon { animation-delay: 0s; }
+.map-location[data-target="aca"] .map-location-icon { animation-delay: 0.4s; }
+.map-location[data-target="jeju"] .map-location-icon { animation-delay: 0.8s; }
+.map-location[data-target="ponyville"] .map-location-icon { animation-delay: 1.2s; }
+
+@keyframes bounce-gentle {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+
+/* Path lines between locations (SVG-like with CSS) */
+.map-paths {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.map-paths svg {
+  width: 100%;
+  height: 100%;
+}
+
+.map-paths path {
+  fill: none;
+  stroke: var(--color-gold);
+  stroke-width: 2;
+  stroke-dasharray: 8, 6;
+  opacity: 0.5;
+}
+
+/* Map instruction text */
+.map-instruction {
+  text-align: center;
+  padding: 16px;
+  color: var(--color-text-light);
+  font-size: 1rem;
+}
+
+.map-instruction strong {
+  color: var(--color-lavender);
+}
+
+/* Responsive map */
+@media (max-width: 768px) {
+  .map-locations {
+    flex-wrap: wrap;
+    gap: 20px;
+    padding: 60px 16px 30px;
+    justify-content: center;
+  }
+
+  .map-location-icon {
+    width: 80px;
+    height: 80px;
+    font-size: 2rem;
+  }
+
+  .map-location-name {
+    font-size: 0.85rem;
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

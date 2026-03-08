@@ -1,0 +1,14 @@
+# OS files
+Thumbs.db
+.DS_Store
+desktop.ini
+
+# IDE
+.vscode/
+.idea/
+
+# Tools (local utility, not needed on site)
+tools/
+
+# Claude session files
+.claude/

@@ -1,0 +1,202 @@
+/* ========================================
+   Custom Animations (Phase 1 stubs + basics)
+   ======================================== */
+
+/* Basic fade in variants */
+.fade-in {
+  animation: fadeIn 0.4s ease both;
+}
+
+.fade-in-up {
+  animation: fadeInUp 0.5s ease both;
+}
+
+.bounce-in {
+  animation: bounceIn 0.6s cubic-bezier(0.68, -0.55, 0.27, 1.55) both;
+}
+
+@keyframes bounceIn {
+  0% { transform: scale(0.3); opacity: 0; }
+  50% { transform: scale(1.05); }
+  70% { transform: scale(0.95); }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+/* Sparkle background for magic elements */
+.sparkle-bg {
+  position: relative;
+  overflow: hidden;
+}
+
+.sparkle-bg::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background:
+    radial-gradient(circle, rgba(255, 215, 0, 0.3) 1px, transparent 1px),
+    radial-gradient(circle, rgba(200, 162, 255, 0.2) 1px, transparent 1px);
+  background-size: 50px 50px, 70px 70px;
+  background-position: 0 0, 25px 35px;
+  animation: sparkleFloat 4s linear infinite;
+  pointer-events: none;
+}
+
+@keyframes sparkleFloat {
+  from { transform: translate(0, 0); }
+  to { transform: translate(25px, 25px); }
+}
+
+/* Gentle float for decorative elements */
+.float-gentle {
+  animation: floatGentle 3s ease-in-out infinite;
+}
+
+@keyframes floatGentle {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+/* Rainbow shimmer for special text */
+.rainbow-text {
+  background: linear-gradient(
+    90deg,
+    #FFB6D9, #C8A2FF, #87CEEB, #A8E6CF, #FFD700, #FFB6D9
+  );
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: rainbowShift 3s linear infinite;
+}
+
+@keyframes rainbowShift {
+  from { background-position: 0% center; }
+  to { background-position: 200% center; }
+}
+
+/* Pulse glow for interactive elements */
+.glow-pulse {
+  animation: glowPulse 2s ease-in-out infinite;
+}
+
+@keyframes glowPulse {
+  0%, 100% { box-shadow: 0 0 5px rgba(200, 162, 255, 0.3); }
+  50% { box-shadow: 0 0 20px rgba(200, 162, 255, 0.6), 0 0 40px rgba(255, 182, 217, 0.3); }
+}
+
+/* Typewriter effect (for Phase 2 enhancement) */
+.typewriter {
+  overflow: hidden;
+  border-right: 2px solid var(--color-lavender);
+  white-space: nowrap;
+  animation:
+    typing 2s steps(40, end),
+    blink 0.75s step-end infinite;
+}
+
+@keyframes typing {
+  from { width: 0; }
+  to { width: 100%; }
+}
+
+@keyframes blink {
+  from, to { border-color: transparent; }
+  50% { border-color: var(--color-lavender); }
+}
+
+/* ── Character Display ── */
+.character-display {
+  text-align: center;
+  margin: 16px 0;
+  min-height: 80px;
+}
+
+.character-img {
+  max-width: 160px;
+  max-height: 160px;
+  object-fit: contain;
+  filter: drop-shadow(0 4px 8px rgba(0,0,0,0.1));
+  animation: floatGentle 3s ease-in-out infinite;
+  background: transparent;
+}
+
+.character-emoji {
+  font-size: 4rem;
+  display: inline-block;
+  animation: floatGentle 3s ease-in-out infinite;
+}
+
+/* Reward screen character */
+.reward-character {
+  margin: 8px 0 16px;
+}
+
+.reward-character .character-img {
+  max-width: 120px;
+  max-height: 120px;
+}
+
+.reward-character .character-emoji {
+  font-size: 3rem;
+}
+
+/* ── Sparkle Particles ── */
+.sparkle-container {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.sparkle-particle {
+  position: absolute;
+  color: var(--color-gold);
+  opacity: 0;
+  animation: sparkleFloat2 3s ease-in-out infinite;
+}
+
+@keyframes sparkleFloat2 {
+  0% { opacity: 0; transform: translateY(0) scale(0.5); }
+  30% { opacity: 0.8; }
+  70% { opacity: 0.6; }
+  100% { opacity: 0; transform: translateY(-30px) scale(1.2); }
+}
+
+/* ── Level Up Overlay ── */
+.levelup-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9998;
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.levelup-flash {
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle, rgba(255, 215, 0, 0.4) 0%, transparent 70%);
+  animation: levelFlash 1.5s ease-out;
+}
+
+@keyframes levelFlash {
+  0% { opacity: 0; transform: scale(0.5); }
+  20% { opacity: 1; }
+  100% { opacity: 0; transform: scale(2); }
+}
+
+.levelup-overlay.fade-out {
+  animation: fadeOut 0.5s ease forwards;
+}
+
+/* Stagger delays for lists */
+.stagger-1 { animation-delay: 0.1s; }
+.stagger-2 { animation-delay: 0.2s; }
+.stagger-3 { animation-delay: 0.3s; }
+.stagger-4 { animation-delay: 0.4s; }
+.stagger-5 { animation-delay: 0.5s; }
+.stagger-6 { animation-delay: 0.6s; }

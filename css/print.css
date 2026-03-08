@@ -1,0 +1,81 @@
+/* ========================================
+   Print Styles
+   ======================================== */
+
+@media print {
+  /* Hide everything except print area */
+  body * {
+    visibility: hidden;
+  }
+
+  #print-area,
+  #print-area * {
+    visibility: visible;
+  }
+
+  #print-area {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+
+  .print-story {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 40px;
+    font-family: 'Nunito', 'Noto Sans KR', sans-serif;
+  }
+
+  .print-title {
+    text-align: center;
+    font-size: 24pt;
+    margin-bottom: 8px;
+    color: #8B5CF6;
+  }
+
+  .print-subtitle {
+    text-align: center;
+    font-size: 14pt;
+    color: #888;
+    margin-bottom: 32px;
+    border-bottom: 2px dashed #E0D0F0;
+    padding-bottom: 16px;
+  }
+
+  .print-sentence {
+    font-size: 14pt;
+    line-height: 2.2;
+    margin-bottom: 8px;
+    color: #333;
+  }
+
+  .print-sentence--answer {
+    color: #6B21A8;
+    border-left: 3px solid #C8A2FF;
+    padding-left: 12px;
+  }
+
+  .print-footer {
+    margin-top: 40px;
+    text-align: center;
+    border-top: 2px dashed #E0D0F0;
+    padding-top: 16px;
+    font-size: 11pt;
+    color: #999;
+  }
+
+  /* Decorative border for the whole story */
+  .print-story {
+    border: 3px solid #E0D0F0;
+    border-radius: 16px;
+    background: white;
+  }
+}
+
+/* Print area hidden in screen view */
+@media screen {
+  #print-area {
+    display: none;
+  }
+}
