@@ -255,9 +255,9 @@ Magical golden sunset sky.
 
 | 변형 | 파일명 |
 |------|--------|
-| 해변/낮 (기본) | `jeju-beach-day.png` |
-| 귤밭/해질녘 | `jeju-tangerine-sunset.png` |
-| 한라산/아침 | `jeju-hallasan-morning.png` |
+| 해변/낮 (기본) | `jeju-beach-day.jpg` |
+| 귤밭/해질녘 | `jeju-tangerine-sunset.jpg` |
+| 한라산/아침 | `jeju-hallasan-morning.jpg` |
 
 > **저장 위치:** `assets/images/backgrounds/jeju/`
 
@@ -446,9 +446,9 @@ assets/images/
 │   │   ├── pangyo-autumn-sunset.png
 │   │   └── pangyo-winter-night.png
 │   ├── jeju/
-│   │   ├── jeju-beach-day.png
-│   │   ├── jeju-tangerine-sunset.png
-│   │   └── jeju-hallasan-morning.png
+│   │   ├── jeju-beach-day.jpg
+│   │   ├── jeju-tangerine-sunset.jpg
+│   │   └── jeju-hallasan-morning.jpg
 │   ├── aca/
 │   │   ├── aca-classroom.png
 │   │   ├── aca-library.png
