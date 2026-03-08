@@ -242,6 +242,19 @@
     function tryEnter() {
       if (input.value === MAGIC_PASSWORD) {
         sessionStorage.setItem('yuna_forest_auth', '1');
+        // Play a little welcome chime
+        try {
+          var ac = new (window.AudioContext || window.webkitAudioContext)();
+          [523, 659, 784, 1047].forEach(function(f, i) {
+            var o = ac.createOscillator(), g = ac.createGain();
+            o.type = 'sine'; o.frequency.value = f;
+            g.gain.setValueAtTime(0.15, ac.currentTime + i * 0.12);
+            g.gain.exponentialRampToValueAtTime(0.001, ac.currentTime + i * 0.12 + 0.3);
+            o.connect(g); g.connect(ac.destination);
+            o.start(ac.currentTime + i * 0.12);
+            o.stop(ac.currentTime + i * 0.12 + 0.3);
+          });
+        } catch(e) {}
         gate.style.opacity = '1';
         gate.style.transition = 'opacity 0.4s ease';
         gate.style.opacity = '0';
@@ -254,6 +267,15 @@
           loadApp();
         }, 400);
       } else {
+        try {
+          var ac2 = new (window.AudioContext || window.webkitAudioContext)();
+          var o = ac2.createOscillator(), g = ac2.createGain();
+          o.type = 'sine'; o.frequency.value = 330;
+          g.gain.setValueAtTime(0.12, ac2.currentTime);
+          g.gain.exponentialRampToValueAtTime(0.001, ac2.currentTime + 0.2);
+          o.connect(g); g.connect(ac2.destination);
+          o.start(); o.stop(ac2.currentTime + 0.2);
+        } catch(e) {}
         error.style.display = 'block';
         input.style.borderColor = '#FF6B8A';
         input.value = '';
@@ -273,6 +295,7 @@
         'js/md-parser.js',
         'js/progress-tracker.js',
         'js/animation-controller.js',
+        'js/sound-manager.js',
         'js/quest-engine.js',
         'js/app.js'
       ];

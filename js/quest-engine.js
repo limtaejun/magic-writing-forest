@@ -140,6 +140,7 @@ class QuestEngine {
       submitBtn.className = 'btn btn-submit';
       submitBtn.textContent = 'Submit My Answer! ✨';
       submitBtn.addEventListener('click', () => {
+        if (window.soundManager) window.soundManager.playSubmit();
         this._handleSubmit(quest, inputRefs, container);
       });
       actions.appendChild(submitBtn);
@@ -149,6 +150,7 @@ class QuestEngine {
       hintBtn.className = 'btn btn-hint';
       hintBtn.textContent = 'Hint ⭐';
       hintBtn.addEventListener('click', () => {
+        if (window.soundManager) window.soundManager.playHint();
         this._showHint(quest, inputRefs);
       });
       actions.appendChild(hintBtn);

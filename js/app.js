@@ -77,6 +77,7 @@ class App {
     // Map location clicks
     document.querySelectorAll('.map-location').forEach(el => {
       el.addEventListener('click', () => {
+        if (window.soundManager) window.soundManager.playNavigate();
         const target = el.dataset.target;
         switch (target) {
           case 'aca':
@@ -98,12 +99,15 @@ class App {
     // Back buttons
     document.addEventListener('click', (e) => {
       if (e.target.closest('.btn-back-map')) {
+        if (window.soundManager) window.soundManager.playBack();
         this.showScreen('map');
       }
       if (e.target.closest('.btn-back-sections')) {
+        if (window.soundManager) window.soundManager.playBack();
         this.showScreen('sections');
       }
       if (e.target.closest('.btn-back-quests')) {
+        if (window.soundManager) window.soundManager.playBack();
         if (this._lastQuestListScreen === 'location-quests') {
           this.showScreen('map');
         } else {
@@ -119,7 +123,12 @@ class App {
     const soundBtn = document.getElementById('sound-toggle');
     if (soundBtn) {
       soundBtn.addEventListener('click', () => {
-        soundBtn.classList.toggle('muted');
+        if (window.soundManager) {
+          const muted = window.soundManager.toggleMute();
+          soundBtn.classList.toggle('muted', muted);
+          soundBtn.textContent = muted ? '🔇' : '🔊';
+          if (!muted) window.soundManager.playClick();
+        }
       });
     }
   }
@@ -193,6 +202,7 @@ class App {
         </div>
       `;
       card.addEventListener('click', () => {
+        if (window.soundManager) window.soundManager.playClick();
         this.currentSectionId = section.id;
         this.showScreen('quest-list', { sectionId: section.id });
       });
@@ -227,6 +237,7 @@ class App {
       `;
 
       item.addEventListener('click', () => {
+        if (window.soundManager) window.soundManager.playClick();
         this.showScreen('quest', { questId: quest.id });
       });
 
@@ -239,6 +250,7 @@ class App {
     const quest = this.engine.getQuest(questId);
     if (!quest) return;
 
+    if (window.soundManager) window.soundManager.playQuestStart();
     const container = document.getElementById('quest-container');
     this.engine.renderQuest(quest, container);
   }
@@ -292,16 +304,27 @@ class App {
     this.showScreen('reward');
     this.updateProfile();
 
-    // Fire confetti!
+    // Fire confetti + sound!
     if (result.overallTier === 'perfect') {
       AnimationController.firePerfectConfetti();
+      if (window.soundManager) window.soundManager.playPerfect();
+    } else if (result.overallTier === 'creative') {
+      AnimationController.fireCreativeSparkle();
+      if (window.soundManager) window.soundManager.playCreative();
     } else {
       AnimationController.fireCreativeSparkle();
+      if (window.soundManager) window.soundManager.playClose();
     }
+
+    // Stamp sound
+    if (window.soundManager) setTimeout(() => window.soundManager.playStamp(), 500);
 
     // Level up effect
     if (reward.leveledUp) {
-      setTimeout(() => AnimationController.levelUpEffect(), 800);
+      setTimeout(() => {
+        AnimationController.levelUpEffect();
+        if (window.soundManager) window.soundManager.playLevelUp();
+      }, 800);
     }
 
     // Animate stamp
