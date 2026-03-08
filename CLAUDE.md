@@ -251,13 +251,13 @@ Wirting2026/
 │           ├── bgm-reward.mp3
 │           └── bgm-ponyville.mp3
 ├── css/
-│   ├── style.css                  # 메인 스타일 + 볼륨 컨트롤
+│   ├── style.css                  # 메인 스타일 + 볼륨 컨트롤 + 위치별 배경 테마
 │   ├── animations.css             # 캐릭터/스파클/레벨업 애니메이션
 │   ├── quest.css                  # 퀘스트 화면 + 학부모 승인 버튼
 │   ├── map.css                    # 지도 화면
 │   └── print.css                  # 프린트용 스타일
 ├── js/
-│   ├── app.js                     # 메인 앱 (화면 전환, 이벤트, 보상, 프린트)
+│   ├── app.js                     # 메인 앱 (화면 전환, 이벤트, 보상, 프린트, 위치별 배경 전환)
 │   ├── quest-engine.js            # 퀘스트 렌더링/채점 (3단계 + 학부모 승인)
 │   ├── md-parser.js               # 마크다운 파서 (브라우저 런타임)
 │   ├── animation-controller.js    # 컨페티/타자기/캐릭터/스파클/레벨업
@@ -351,7 +351,9 @@ templates_5s.md┘                                        │
 - [x] 볼륨 슬라이더 + 뮤트 토글 UI
 - [x] 프린트 기능 (CSS @media print)
 - [x] 레벨업 시스템 (5단계) + 컬렉션북 (판교)
-- [x] 제주 배경 테마 (위치별 배경 이미지 전환)
+- [x] 제주 배경 테마 (위치별 배경 이미지 전환: 목록→beach, 퀘스트→hallasan, 보상→tangerine)
+- [x] 제주 배경 이미지 최적화 (2752x1536 PNG 9MB → 1920x1080 JPG 0.5MB, 94% 감소)
+- [x] 상단 바(top-bar) 투명 배경 처리 (배경 이미지와 자연스럽게 어울림)
 - [ ] idle 애니메이션 + 마이크로 인터랙션
 
 ### Phase 3.5: Deployment & Auth (배포 & 인증) ✅ 완료
