@@ -94,9 +94,14 @@ h1, h2, h3, h4 {
   padding: 16px 0;
   position: sticky;
   top: 0;
-  background: transparent;
+  background: rgba(255, 248, 240, 0.85);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
   z-index: 100;
   border-bottom: none;
+  margin: 0 -16px;
+  padding-left: 16px;
+  padding-right: 16px;
 }
 
 .app-title {
