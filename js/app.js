@@ -166,8 +166,12 @@ class App {
     // Hide all screens
     document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
 
+    // Clear location background themes
+    document.body.classList.remove('bg-jeju-list', 'bg-jeju-quest', 'bg-jeju-reward');
+
     switch (screenName) {
       case 'map':
+        this._currentLocation = null;
         document.getElementById('screen-map').classList.add('active');
         this.updateProfile();
         break;
@@ -185,11 +189,17 @@ class App {
 
       case 'quest':
         document.getElementById('screen-quest').classList.add('active');
+        if (this._currentLocation === 'jeju') {
+          document.body.classList.add('bg-jeju-quest');
+        }
         this.startQuest(data.questId);
         break;
 
       case 'reward':
         document.getElementById('screen-reward').classList.add('active');
+        if (this._currentLocation === 'jeju') {
+          document.body.classList.add('bg-jeju-reward');
+        }
         break;
 
       case 'collection':
@@ -199,7 +209,11 @@ class App {
 
       case 'location-quests':
         this._lastQuestListScreen = 'location-quests';
+        this._currentLocation = data.location || null;
         document.getElementById('screen-location-quests').classList.add('active');
+        if (data.location === 'jeju') {
+          document.body.classList.add('bg-jeju-list');
+        }
         this.renderLocationQuests(data.location);
         break;
     }

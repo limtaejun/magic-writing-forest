@@ -559,6 +559,38 @@ h1, h2, h3, h4 {
   font-size: 1.1rem;
 }
 
+/* ── Location Background Themes ── */
+body.bg-jeju-list,
+body.bg-jeju-quest,
+body.bg-jeju-reward {
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+}
+
+body.bg-jeju-list {
+  background-image: linear-gradient(rgba(255,248,240,0.55), rgba(255,248,240,0.55)),
+    url('../assets/images/backgrounds/jeju/jeju-beach-day.jpg');
+}
+
+body.bg-jeju-quest {
+  background-image: linear-gradient(rgba(255,248,240,0.5), rgba(255,248,240,0.5)),
+    url('../assets/images/backgrounds/jeju/jeju-hallasan-morning.jpg');
+}
+
+body.bg-jeju-reward {
+  background-image: linear-gradient(rgba(255,248,240,0.4), rgba(255,248,240,0.4)),
+    url('../assets/images/backgrounds/jeju/jeju-tangerine-sunset.jpg');
+}
+
+body.bg-jeju-list .top-bar,
+body.bg-jeju-quest .top-bar,
+body.bg-jeju-reward .top-bar {
+  background: rgba(255,248,240,0.85);
+  backdrop-filter: blur(8px);
+}
+
 /* ── Location Quests (Jeju / Ponyville) ── */
 .location-subtitle {
   color: var(--color-text-light);
