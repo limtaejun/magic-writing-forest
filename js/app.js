@@ -533,7 +533,14 @@ class App {
 }
 
 // Boot
-document.addEventListener('DOMContentLoaded', () => {
-  const app = new App();
-  app.init();
-});
+(function bootApp() {
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => {
+      const app = new App();
+      app.init();
+    });
+  } else {
+    const app = new App();
+    app.init();
+  }
+})();
