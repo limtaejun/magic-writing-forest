@@ -372,11 +372,16 @@
       loginError.style.display = 'none';
 
       var provider = new firebase.auth.GoogleAuthProvider();
-      window._auth.signInWithPopup(provider).catch(function(err) {
+      window._auth.signInWithRedirect(provider);
+    });
+
+    // Handle redirect result errors
+    window._auth.getRedirectResult().catch(function(err) {
+      if (err.code !== 'auth/redirect-cancelled-by-user') {
         loginError.style.display = 'block';
         loginError.textContent = err.message;
         loginStatus.style.display = 'none';
-      });
+      }
     });
 
     // Auth state listener

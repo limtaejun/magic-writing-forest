@@ -156,10 +156,11 @@ class App {
     // Logout button
     const logoutBtn = document.getElementById('logout-btn');
     if (logoutBtn) {
-      logoutBtn.addEventListener('click', () => {
+      logoutBtn.addEventListener('click', async () => {
         if (window._auth) {
           if (window.soundManager) window.soundManager.stopBGM();
-          window._auth.signOut();
+          await this.progress.flushAndSave();
+          await window._auth.signOut();
           window._appLoaded = false;
           location.reload();
         }

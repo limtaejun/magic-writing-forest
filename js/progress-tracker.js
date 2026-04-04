@@ -8,6 +8,11 @@ class ProgressTracker {
     this.storageKey = storageKey;
     this.state = null;
     this._saveTimeout = null;
+
+    // Flush pending Firestore save before page unload
+    window.addEventListener('beforeunload', () => {
+      this._flushPendingSave();
+    });
   }
 
   /** Default empty state */
@@ -111,15 +116,67 @@ class ProgressTracker {
         .doc(window._currentUser.uid)
         .set(this.state, { merge: true })
         .then(() => console.log('Progress saved to Firestore'))
-        .catch(e => console.warn('Firestore save failed:', e));
+        .catch(e => {
+          console.warn('Firestore save failed:', e);
+          this._notifySaveError();
+        });
     } catch (e) {
       console.warn('Firestore save error:', e);
+      this._notifySaveError();
     }
+  }
+
+  /** Immediately execute any pending Firestore save */
+  _flushPendingSave() {
+    if (this._saveTimeout) {
+      clearTimeout(this._saveTimeout);
+      this._saveTimeout = null;
+      this._saveFirestore();
+    }
+  }
+
+  /** Force immediate save and return a promise (for logout) */
+  async flushAndSave() {
+    if (!this.state) return;
+    this._saveLocal();
+    if (this._saveTimeout) {
+      clearTimeout(this._saveTimeout);
+      this._saveTimeout = null;
+    }
+    if (window._db && window._currentUser) {
+      try {
+        await window._db
+          .collection('users')
+          .doc(window._currentUser.uid)
+          .set(this.state, { merge: true });
+        console.log('Progress saved to Firestore (flush)');
+      } catch (e) {
+        console.warn('Firestore flush save failed:', e);
+      }
+    }
+  }
+
+  /** Show on-screen notification when Firestore save fails */
+  _notifySaveError() {
+    let toast = document.getElementById('save-error-toast');
+    if (!toast) {
+      toast = document.createElement('div');
+      toast.id = 'save-error-toast';
+      toast.style.cssText = 'position:fixed;bottom:20px;right:20px;background:#FF6B8A;color:white;padding:12px 20px;border-radius:12px;font-family:Nunito,sans-serif;font-size:0.9rem;z-index:9999;box-shadow:0 4px 12px rgba(0,0,0,0.15);transition:opacity 0.3s;';
+      document.body.appendChild(toast);
+    }
+    toast.textContent = 'Cloud save failed. Progress saved locally only.';
+    toast.style.opacity = '1';
+    clearTimeout(this._toastTimeout);
+    this._toastTimeout = setTimeout(() => { toast.style.opacity = '0'; }, 4000);
   }
 
   /** Mark a quest as completed */
   markQuestComplete(questId, tier, userAnswers, sectionId) {
-    if (!this.state) this.load();
+    if (!this.state) {
+      console.error('Progress state not loaded. Call await load() first.');
+      return { newStamps: 0, leveledUp: false, newLevel: 1, newLevelName: 'Matisse Beginner' };
+    }
 
     const questKey = String(questId);
     const existing = this.state.quests[questKey];
@@ -165,13 +222,13 @@ class ProgressTracker {
 
   /** Get status of a specific quest */
   getQuestStatus(questId) {
-    if (!this.state) this.load();
+    if (!this.state) return null;
     return this.state.quests[String(questId)] || null;
   }
 
   /** Get progress for a section */
   getSectionProgress(sectionId, totalInSection) {
-    if (!this.state) this.load();
+    if (!this.state) return { completed: 0, total: totalInSection || 0, percentage: 0 };
 
     let completed = 0;
     for (const [, q] of Object.entries(this.state.quests)) {
@@ -189,7 +246,7 @@ class ProgressTracker {
 
   /** Get overall progress */
   getTotalProgress(totalQuests = 235) {
-    if (!this.state) this.load();
+    if (!this.state) return { completed: 0, total: totalQuests, percentage: 0, stamps: { gold: 0, silver: 0 }, totalStamps: 0, level: 1, levelName: 'Matisse Beginner' };
 
     let completed = 0;
     for (const q of Object.values(this.state.quests)) {
@@ -228,7 +285,7 @@ class ProgressTracker {
 
   /** Get level info */
   getLevelInfo() {
-    if (!this.state) this.load();
+    if (!this.state) return { level: 1, name: 'Matisse Beginner', totalStamps: 0, nextThreshold: 25, nextName: 'Matisse Explorer', stampsToNext: 25 };
     const levels = ProgressTracker.LEVELS;
     const currentIdx = levels.findIndex(l => l.level === this.state.level);
     const next = levels[currentIdx + 1] || null;
